@@ -1,3 +1,0 @@
-web: python manage.py migrate && gunicorn bettingSystemProject5.wsgi --bind 0.0.0.0:$PORT
-worker: celery -A bettingSystemProject5 worker --loglevel=info
-beat: celery -A bettingSystemProject5 beat --loglevel=info
