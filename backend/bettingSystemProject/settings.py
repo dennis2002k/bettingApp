@@ -27,9 +27,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-a%kczz*#7sp62767*p-a^lgvx*hf15f=r%8&%$fz&go_+@j^4q'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 CELERY_BEAT_SCHEDULE = {
     'settle-expired-bets': {
