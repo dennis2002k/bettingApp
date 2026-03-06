@@ -13,7 +13,7 @@ services:
 
   celery-worker:
     build: .
-    command: celery -A bettingSystemProject5 worker --loglevel=info
+    command: celery -A bettingSystemProject worker --loglevel=info
     depends_on:
       - redis
     env_file:
@@ -21,7 +21,7 @@ services:
 
   celery-beat:
     build: .
-    command: celery -A bettingSystemProject5 beat --loglevel=info
+    command: celery -A bettingSystemProject beat --loglevel=info
     depends_on:
       - redis
     env_file:
