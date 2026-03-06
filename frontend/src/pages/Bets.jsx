@@ -116,7 +116,7 @@ export default function Bets() {
           </div>
         ) : (
           <div className="space-y-4">
-            {filteredBets.map((bet) => (
+            {Array.isArray(filteredBets) && filteredBets.map((bet) => (
               <BetCard key={bet.id} bet={bet} />
             ))}
           </div>

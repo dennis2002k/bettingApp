@@ -113,7 +113,7 @@ export default function Home() {
             </div>
           ) : (
             <div className="space-y-4">
-              {events.map((event) => (
+              {Array.isArray(events) && events.map((event) => (
                 <EventCard
                   key={event.id}
                   event={event}
