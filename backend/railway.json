@@ -1,7 +1,4 @@
 {
-  "build": {
-    "builder": "NIXPACKS"
-  },
   "deploy": {
     "startCommand": "python manage.py migrate && gunicorn bettingSystemProject.wsgi --bind 0.0.0.0:$PORT"
   }
