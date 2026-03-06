@@ -108,7 +108,7 @@ SIMPLE_JWT = {
 
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:5173',
-    'https://bettingapp-production-9fc1.up.railway.app/',
+    'https://bettingapp-production-9fc1.up.railway.app',
 ]
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
