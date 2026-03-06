@@ -1,20 +1,26 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import './App.css';
 
-import { Routes, Route } from 'react-router-dom'
-import Login from './pages/Login'
-import Home from './pages/Home'
-import Bets from './pages/Bets'
+import { Routes, Route } from 'react-router-dom';
+import ProtectedRoute from "./components/ProtectedRoute";
+import Login from './pages/Login';
+import Home from './pages/Home';
+import Bets from './pages/Bets';
 
 export default function App() {
-    return (
-        <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/bets" element={<Bets />} />
-        </Routes>
-    )
+  return (
+    <Routes>
+      <Route path="/login" element={<Login />} />
+      <Route path="/" element={
+        <ProtectedRoute>
+          <Home />
+        </ProtectedRoute>
+      } />
+      <Route path="/bets" element={
+        <ProtectedRoute>
+          <Bets />
+        </ProtectedRoute>
+      } />
+    </Routes>
+  );
 }
 
