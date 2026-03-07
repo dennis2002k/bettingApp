@@ -7,4 +7,4 @@ RUN pip install -r requirements.txt
 
 COPY . .
 
-CMD ["celery", "-A", "bettingSystemProject", "worker", "--loglevel=debug", "--uid nobody"]
+CMD ["celery", "-A", "bettingSystemProject", "worker", "--loglevel=debug", "--uid nobody", "--concurrency=2"]
