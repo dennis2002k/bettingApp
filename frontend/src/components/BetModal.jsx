@@ -28,6 +28,7 @@ export default function BetModal({ market, event, balance, onClose, onSuccess })
         market: market.id,
         event: event.id,
         odds: market.current_odds,
+        expires_at: event.ends_at
       });
       onSuccess();
       onClose();
