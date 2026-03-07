@@ -4,6 +4,6 @@
     "dockerfilePath": "backend/Dockerfile.celery"
   },
   "deploy": {
-    "startCommand": "celery -A bettingSystemProject worker --loglevel=info"
+    "startCommand": "celery -A bettingSystemProject worker --loglevel=info --uid nobody"
   }
 }
