@@ -1,0 +1,9 @@
+{
+  "build": {
+    "builder": "DOCKERFILE",
+    "dockerfilePath": "backend/Dockerfile.celery"
+  },
+  "deploy": {
+    "startCommand": "celery -A bettingSystemProject worker --loglevel=info"
+  }
+}
