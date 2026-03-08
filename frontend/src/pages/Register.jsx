@@ -16,7 +16,7 @@ export default function Register() {
   const handleRegister = async () => {
     setError("");
 
-    if (!form.username || !form.email || !form.password) {
+    if (!form.username || !form.password) {
       setError("Please fill in all fields.");
       return;
     }
@@ -33,7 +33,7 @@ export default function Register() {
     try {
       await api.post("/users/", {
         username: form.username,
-        email: form.email,
+        // email: form.email,
         password: form.password,
       });
       // auto login after register
@@ -115,21 +115,6 @@ export default function Register() {
                 onChange={(e) => update("username", e.target.value)}
                 onKeyDown={handleKeyDown}
                 placeholder="your username"
-                className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-4 py-3 text-white placeholder-zinc-600 text-sm focus:outline-none focus:border-green-500 focus:ring-1 focus:ring-green-500 transition-all"
-              />
-            </div>
-
-            {/* email */}
-            <div>
-              <label className="block text-zinc-400 text-xs font-bold tracking-widest uppercase mb-2">
-                Email
-              </label>
-              <input
-                type="email"
-                value={form.email}
-                onChange={(e) => update("email", e.target.value)}
-                onKeyDown={handleKeyDown}
-                placeholder="your@email.com"
                 className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-4 py-3 text-white placeholder-zinc-600 text-sm focus:outline-none focus:border-green-500 focus:ring-1 focus:ring-green-500 transition-all"
               />
             </div>
