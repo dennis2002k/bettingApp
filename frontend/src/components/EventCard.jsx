@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 // ── Event Card ────────────────────────────────────────────────────────────────
-export default function EventCard({ event, onBetClick }) {
+export default function EventCard({ event, onBetClick, user, onSetResult }) {
   const [expanded, setExpanded] = useState(false);
   const startAt = event.start_at ? new Date(event.start_at) : null;
   const isLive = startAt && startAt <= new Date();
@@ -42,12 +42,40 @@ export default function EventCard({ event, onBetClick }) {
                 key={market.id}
                 className="flex items-center justify-between bg-zinc-800 rounded-lg px-4 py-3"
               >
+              <div>
                 <span className="text-zinc-300 text-sm">{market.name}</span>
+                {/* show result if set */}
+                {market.result !== null && market.result !== undefined && (
+                  <span className={`ml-2 text-xs font-black tracking-widest uppercase px-2 py-0.5 rounded-full ${
+                    market.result 
+                      ? "bg-green-500/10 text-green-400 border border-green-500/30" 
+                      : "bg-red-500/10 text-red-400 border border-red-500/30"
+                  }`}>
+                    {market.result ? "✓ Won" : "✗ Lost"}
+                  </span>
+                )}
+              </div>
                 <div className="flex items-center gap-3">
                   <span className="text-green-400 font-black text-sm">
                     {market.current_odds}
                   </span>
-                  <button onClick={() => onBetClick(market)}>Bet</button>
+                  {/* only show bet button if no result yet */}
+                  {market.result === null || market.result === undefined ? (
+                    <button
+                      onClick={() => onBetClick(market)}
+                      className="text-xs font-black tracking-widest uppercase px-3 py-1.5 bg-green-500 hover:bg-green-400 text-black rounded-lg transition-all"
+                    >
+                      Bet
+                    </button>
+                  ) : null}
+                   {user?.is_staff && (
+                    <button
+                      onClick={() => onSetResult(market)}
+                      className="text-xs font-black tracking-widest uppercase px-3 py-1.5 bg-zinc-700 hover:bg-zinc-600 text-zinc-300 rounded-lg transition-all"
+                    >
+                      Set Result
+                    </button>
+                  )}
                 </div>
               </div>
             ))

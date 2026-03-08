@@ -4,6 +4,7 @@ import BalanceCard from "../components/BalanceCard";
 import EventCard from "../components/EventCard";
 import BetModal from "../components/BetModal"
 import AdminEventModal from "../components/AdminEventModal";
+import MarketResultModal from "../components/MarketResultModel";
 import axios from "axios";
 
 const api = axios.create({
@@ -25,6 +26,10 @@ export default function Home() {
   const [selectedMarket, setSelectedMarket] = useState(null);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [showAdminModal, setShowAdminModal] = useState(false);
+  const [selectedMarketResult, setSelectedMarketResult] = useState(null);
+  const [activeTab, setActiveTab] = useState("upcoming");
+  const upcomingEvents = events.filter(e => !e.ends_at || new Date(e.ends_at) > new Date());
+  const finishedEvents = events.filter(e => e.ends_at && new Date(e.ends_at) <= new Date());  
 
   useEffect(() => {
     const fetchData = async () => {
@@ -49,6 +54,13 @@ export default function Home() {
     };
     fetchData();
   }, []);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      api.get("/events/").then(res => setEvents(res.data));
+    }, 30000);
+    return () => clearInterval(interval);
+  } , []);
 
   const handleAddFunds = async (amount) => {
     const res = await api.post("/users/add-funds/", { amount });
@@ -87,68 +99,88 @@ export default function Home() {
         </div>
 
         {/* events */}
-        <div>
-          <div className="flex items-center justify-between mb-5">
-            <h2 className="text-white font-black text-lg tracking-widest uppercase">
-              Upcoming Events
-            </h2>
-            <span className="text-zinc-600 text-xs font-bold tracking-widest uppercase">
-              {events.length} events
-            </span>
-          </div>
-
-          {error && (
-            <div className="text-red-400 text-sm text-center py-10">{error}</div>
-          )}
-
-          {loadingEvents ? (
-            <div className="space-y-4">
-              {[1, 2, 3].map((i) => (
-                <div key={i} className="bg-zinc-900 border border-zinc-800 rounded-2xl p-5 animate-pulse h-20" />
-              ))}
-            </div>
-          ) : events.length === 0 ? (
-            <div className="text-center py-20 text-zinc-600 text-sm tracking-widest uppercase font-bold">
-              No upcoming events
-            </div>
-          ) : (
-            <div className="space-y-4">
-              {Array.isArray(events) && events.map((event) => (
-                <EventCard
-                  key={event.id}
-                  event={event}
-                  onBetClick={(market) => {
-                      setSelectedMarket(market);
-                      setSelectedEvent(event);
-                  }}
-                />
-              ))}
-            </div>
-          )}
-          
+        {/* tabs */}
+        <div className="flex gap-2 mb-6">
+          <button
+            onClick={() => setActiveTab("upcoming")}
+            className={`text-xs font-black tracking-widest uppercase px-4 py-2 rounded-lg border transition-all ${
+              activeTab === "upcoming"
+                ? "bg-green-500 border-green-500 text-black"
+                : "bg-zinc-900 border-zinc-700 text-zinc-400 hover:border-zinc-500"
+            }`}
+          >
+            Upcoming
+            <span className="ml-2 opacity-60">{upcomingEvents.length}</span>
+          </button>
+          <button
+            onClick={() => setActiveTab("finished")}
+            className={`text-xs font-black tracking-widest uppercase px-4 py-2 rounded-lg border transition-all ${
+              activeTab === "finished"
+                ? "bg-green-500 border-green-500 text-black"
+                : "bg-zinc-900 border-zinc-700 text-zinc-400 hover:border-zinc-500"
+            }`}
+          >
+            Finished
+            <span className="ml-2 opacity-60">{finishedEvents.length}</span>
+          </button>
         </div>
+
+        {/* events list */}
+        {loadingEvents ? (
+          <div className="space-y-4">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="bg-zinc-900 border border-zinc-800 rounded-2xl p-5 animate-pulse h-20" />
+            ))}
+          </div>
+        ) : (activeTab === "upcoming" ? upcomingEvents : finishedEvents).length === 0 ? (
+          <div className="text-center py-20 text-zinc-600 text-sm tracking-widest uppercase font-bold">
+            No {activeTab} events
+          </div>
+        ) : (
+          <div className="space-y-4">
+            {(activeTab === "upcoming" ? upcomingEvents : finishedEvents).map((event) => (
+              <EventCard
+                key={event.id}
+                event={event}
+                user={user}
+                onBetClick={(market) => { setSelectedMarket(market); setSelectedEvent(event); }}
+                onSetResult={(market) => { setSelectedMarketResult({ market, event }); }}
+              />
+            ))}
+          </div>
+        )}
       </main>
       {selectedMarket && (
-            <BetModal
-                market={selectedMarket}
-                event={selectedEvent}
-                balance={profile?.balance ?? 0}
-                onClose={() => setSelectedMarket(null)}
-                onSuccess={() => {
-                // refresh balance after bet is placed
-                api.get("/users/me/").then(res => setProfile(res.data.profile));
-                }}
-            />
-          )}
-        {showAdminModal && (
-            <AdminEventModal
-                onClose={() => setShowAdminModal(false)}
-                onSuccess={() => {
-                // refresh events list after creating
-                api.get("/events/").then(res => setEvents(res.data));
-                }}
-            />
-        )}
+        <BetModal
+            market={selectedMarket}
+            event={selectedEvent}
+            balance={profile?.balance ?? 0}
+            onClose={() => setSelectedMarket(null)}
+            onSuccess={() => {
+            // refresh balance after bet is placed
+            api.get("/users/me/").then(res => setProfile(res.data.profile));
+            }}
+        />
+      )}
+      {showAdminModal && (
+        <AdminEventModal
+            onClose={() => setShowAdminModal(false)}
+            onSuccess={() => {
+            // refresh events list after creating
+            api.get("/events/").then(res => setEvents(res.data));
+            }}
+        />
+      )}
+      {selectedMarketResult && (
+        <MarketResultModal
+          market={selectedMarketResult.market}
+          event={selectedMarketResult.event}
+          onClose={() => setSelectedMarketResult(null)}
+          onSuccess={() => {
+            api.get("/events/").then(res => setEvents(res.data));
+          }}
+        />
+      )}
     </div>
   );
 }

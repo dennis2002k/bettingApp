@@ -46,7 +46,7 @@ export default function BalanceCard({ profile, onAddFunds }) {
           <button
             onClick={handleAddFunds}
             disabled={loading}
-            className="px-4 py-2 bg-green-500 hover:bg-green-400 disabled:opacity-50 text-black text-xs font-black tracking-widest uppercase rounded-lg transition-all"
+            className="px-4 py-2 bg-green-500 hover:bg-green-400 disabled:opacity-50 text-xs font-black tracking-widest uppercase rounded-lg transition-all"
           >
             {loading ? "..." : "Add"}
           </button>
