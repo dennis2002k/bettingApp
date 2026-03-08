@@ -12,7 +12,7 @@ class UserProfileSerailizer(serializers.ModelSerializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
-    bets = serializers.PrimaryKeyRelatedField(many=True, queryset=Bet.objects.all())
+    bets = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
     profile = UserProfileSerailizer(read_only=True)
 
     class Meta:
