@@ -74,7 +74,7 @@ class UserProfile(models.Model):
     balance = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     total_bets = models.IntegerField(default=0)
     bets_won = models.IntegerField(default=0)
-    betrs_lost = models.IntegerField(default=0)
+    bets_lost = models.IntegerField(default=0)
 
     def __str__(self):
         return f"{self.user.username}'s Profile"
