@@ -1,1 +1,1 @@
-## Frontend deployed with railway at: https://bettingapp-production-9fc1.up.railway.app/login
+![Demo of betting app](./demo.gif)
