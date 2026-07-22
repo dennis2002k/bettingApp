@@ -5,7 +5,7 @@ from .models import Bet
 @shared_task
 def settle_expired_bets():
     expired_bets = Bet.objects.filter(
-        expires_at__lt=timezone.now(),
+        # expires_at__lt=timezone.now(),
         settled=False,
         market__result__isnull=False
     ).select_related('market', 'user__profile')
