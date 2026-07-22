@@ -4,7 +4,7 @@ A full-stack sports betting application built with Django REST Framework and Rea
 
 Users can create accounts, browse events and betting markets, place bets, and track their betting activity. Administrators can create events, manage markets, and settle results. The project uses JWT authentication, Celery with Redis for background task processing, and Django’s database tools for data management.
 
-
+## Demo
 ![Demo of betting app](./demo.gif)
 
 
