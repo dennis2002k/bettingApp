@@ -1,1 +1,1 @@
-![Demo of betting app](./demo.gif)
+![Demo of betting app](./demo.mp4)
